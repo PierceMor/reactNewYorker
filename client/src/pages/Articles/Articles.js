@@ -21,10 +21,12 @@ class Articles extends Component {
         this.loadArticles();
     };
 
+
+    // Bug here
     loadArticles = () => {
         API.getArticles()
-          .then(res =>
-            this.setState({ articles: res.data, topic: "", startYear: "", endYear: "" })
+          .then(results =>
+            this.setState({ state: results.data, topic: "", startYear: "", endYear: "" })
           )
           .catch(err => console.log(err));
       };
@@ -68,10 +70,10 @@ class Articles extends Component {
         queryURL+=apiKey
 
         API.queryNYT(queryURL)
-            .then(res => {
-                console.log(res.data.response.docs);
+            .then(results => {
+                console.log(results.data.response.docs);
                 this.setState({
-                    results: [...this.state.results, ...res.data.response.docs],
+                    results: [...this.state.results, ...results.data.response.docs],
                     topic: "",
                     startYear: "",
                     endYear: ""
