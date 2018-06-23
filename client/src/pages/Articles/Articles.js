@@ -36,8 +36,15 @@ class Articles extends Component {
         });
     };
 
+    handleFormSubmit = event => {
+        event.preventDefault();
+        let { topic, startYear, endYear } = this.state;
+        let query =  { topic, startYear, endYear }
+        this.getArticles(query)
+    }; //handleFormSubmit
+
     getArticles =  query => {
-        let { topic, startYear, endYear } = Query
+        let { topic, startYear, endYear } = query
         let queryURL = `https://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest`
         let apiKey = `&api-key=dc2c63a1cbf543afb6e0c3e13c834812`
 
@@ -62,14 +69,9 @@ class Articles extends Component {
                     endYear: ""
                 }).catch(err => console.log(err));
             })
-    }; //handleFormSubmit
+    }; // getArticles
     
-     handleFormSubmit = event => {
-        event.preventDefault();
-        let { topic, startYear, endYear } = this.state;
-        let queryURL =  { topic, startYear, endYear }
-        this.getArticles(query)
-    }; //getArticles
+
 
 
     render() {
