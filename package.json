@@ -1,7 +1,10 @@
 {
-  "name": "mern",
+  "name": "reactnewyorker",
   "version": "1.0.0",
-  "description": "",
+  "description": "App for grabbing some NY times articles",
+  "engines": {
+    "node": "8.9.4"
+  },
   "main": "server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
