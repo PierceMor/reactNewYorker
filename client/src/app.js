@@ -4,7 +4,7 @@ import Nav from './components/Nav';
 import Articles from './pages/Articles';
 import SavedArticles from './pages/SavedArticles';
 import NoMatch from './pages/NoMatch';
-import './app.css';
+import './App.css';
 
 class App extends Component {
   render() {
