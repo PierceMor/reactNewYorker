@@ -30,18 +30,45 @@ class Articles extends Component {
     };
 
     handleInputChange = event => {
-
+        const { name, value } = event.target;
+        this.setState({
+            [name]: value
+        });
     };
 
-    handleFormSubmit = event => {
-        event.preventDefault();
+    getArticles =  query => {
         let { topic, startYear, endYear } = Query
         let queryURL = `https://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest`
-        let apiKey = `dc2c63a1cbf543afb6e0c3e13c834812`
+        let apiKey = `&api-key=dc2c63a1cbf543afb6e0c3e13c834812`
+
+        if ( topic ) {
+            queryURL+=`&fq=${topic}`
+        }
+        if (startYear){
+            queryURL+=`&begin_date=${startYear}`
+        }
+        if (endYear){
+            queryURL+=`&end_date=${endYear}`
+        }
+        queryURL+=apiKey
+
+        API.queryNYT(queryURL)
+            .then(res => {
+                console.log(res.data.response.docs);
+                this.setState({
+                    results: [...this.state.results, ...res.data.response.docs],
+                    topic: "",
+                    startYear: "",
+                    endYear: ""
+                }).catch(err => console.log(err));
+            })
     }; //handleFormSubmit
     
-    getArticles = query => {
-
+     handleFormSubmit = event => {
+        event.preventDefault();
+        let { topic, startYear, endYear } = this.state;
+        let queryURL =  { topic, startYear, endYear }
+        this.getArticles(query)
     }; //getArticles
 
 
@@ -51,6 +78,7 @@ class Articles extends Component {
                 <Row>
                     <Col size="sm-12">
                         <Jumbotron>
+
                             <form>
                                 <div>
                                     <label htmlFor="topic">Enteer a topic to search for:</label>
@@ -58,10 +86,43 @@ class Articles extends Component {
                                         onChange={this.handleInputChange}
                                         name='topic'
                                         value={this.state.topic}
-                                        placeholder='topic'
+                                        placeholder='Topic'
                                     />
                                 </div>
+
+                                <div>
+                                    <label htmlFor="startYear">Enter a beginning Year (optional)</label>
+                                    <Input 
+                                        onChange={this.handleInputChange}
+                                        name="startYear"
+                                        value={this.state.startYear}
+                                        placeholder='Start Year'
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="endYear">Enter an Ending Date (optional)</label>
+                                    <Input 
+                                        onChange={this.handleInputChange}
+                                        name="endYear"
+                                        value={this.state.endYear}
+                                        placeholder='End Year'
+                                    />
+                                </div>
+                                
+                                <FormBtn
+                                    disabled={!(this.state.topic)}
+                                    onClick={this.handleFormSubmit}
+                                    type="info"
+                                    >Submit
+                                </FormBtn>
                             </form>
+                        </Jumbotron>
+                    </Col>
+
+                    <Col size="sm-12">
+                        <Jumbotron>
+                            <h1> Results </h1>
                         </Jumbotron>
                     </Col>
                 </Row>
@@ -70,3 +131,5 @@ class Articles extends Component {
     };
 
 }; //articles
+
+export default Articles;
