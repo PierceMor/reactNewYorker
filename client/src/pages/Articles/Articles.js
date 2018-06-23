@@ -18,16 +18,24 @@ class Articles extends Component {
     };
 
     componentDidMount() {
-
+        this.loadArticles();
     };
 
-    loadBooks = () => {
+    loadArticles = () => {
+        API.getArticles()
+          .then(res =>
+            this.setState({ articles: res.data, topic: "", startYear: "", endYear: "" })
+          )
+          .catch(err => console.log(err));
+      };
 
-    };
 
     deleteBook = id => {
-
+    API.deleteBook(id)
+        .then(res => this.loadArticles())
+        .catch(err => console.log(err));
     };
+
 
     handleInputChange = event => {
         const { name, value } = event.target;
